@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>숙소 예약 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+body {
+  background-color: #fff8e1;
+  color: #3e2723;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 위쪽 정렬 */
+  min-height: 100vh; /* 화면 높이에 맞게 늘려줌 */
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 50%;
+  max-width: 800px;
+  background-color: #fff9c4;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 50px; /* 위쪽 여백 */
+  margin-bottom: 50px;
+  box-sizing: border-box; /* 패딩과 보더가 크기에 포함되게 설정 */
+}
+
+
+
+    .room-title {
+      font-size: 2rem;
+      color: #f57f17; /* 노란색 강조 */
+      font-weight: bold;
+    }
+
+    .room-price {
+      font-size: 1.5rem;
+      color: #d32f2f; /* 빨간색 */
+    }
+
+    .btn-custom {
+      background-color: #f57f17;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      width: 100px;
+    }
+
+    .btn-custom:hover {
+      background-color: #fbc02d;
+    }
+
+
+    .payment-method {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+    }
+
+    .payment-method input {
+      margin-right: 10px;
+    }
+
+    /* 예약 정보 출력 영역 */
+    #reservation-summary {
+      display: none;
+    }
+
+    input.form-control{
+      height: 50px; /* 높이를 늘림 */
+      width: 30%; /* 너비를 줄임 */
+    }
+
+   
+
+
+
+
+
+    .slider-container {
+      text-align: center;
+      width: 30%;
+      max-width: 500px;
+      margin: 20px; /* 상하 20px, 좌우 중앙 정렬 */
+      background-color: #fff; /* 배경 흰색 */
+      padding: 20px; /* 내부 여백 */
+      border-radius: 10px; /* 모서리 둥글게 */
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #6d4c41; /* 갈색 톤 */
+    }
+
+    .slider-wrapper {
+      position: relative;
+    }
+
+    .custom-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 5px;
+      background: linear-gradient(to right, #ffd54f, #f57f17); /* 노랑-주황 */
+      outline: none;
+      opacity: 0.9;
+      transition: opacity 0.2s;
+    }
+
+    .custom-slider:hover {
+      opacity: 1;
+    }
+
+    .custom-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #f57f17; /* 주황색 */
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.2s;
+    }
+
+    .custom-slider::-webkit-slider-thumb:hover {
+      background-color: #fbc02d; /* 밝은 노랑 */
+    }
+
+    .slider-output {
+      font-size: 1.2rem;
+      margin-top: 15px;
+      color: #750808; /* 빨강 */
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 class="text-center mb-4">숙소 예약</h1>
+
+    <!-- 선택된 숙소 정보 -->
+    <div class="text-center mb-4">
+      <h2 class="room-title">선택한 객실: <span id="room-name">디럭스 룸</span></h2>
+      <p class="room-price"><span id="room-price">120,000</span>원 / 1박</p>
+    </div>
+
+    <!-- 예약 정보 입력 폼 -->
+    <form id="reservation-form">
+      <div class="d-flex flex-column align-items-center mb-3">
+        <label for="checkin-date" class="form-label">체크인 날짜</label>
+        <input type="date" id="checkin-date" class="text-center form-control" required>
+      </div>
+      <div class="d-flex flex-column align-items-center mb-3">
+        <label for="checkout-date" class="text-center form-label">체크아웃 날짜</label>
+        <input type="date" id="checkout-date" class="text-center form-control" required>
+      </div>
+      <div class="d-flex flex-column align-items-center mb-3">
+
+        <div class="slider-container">
+          <div id="guest-count" class="slider-output">인원: 1명</div>
+          <div class="slider-labels">
+            <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
+          <span>6</span>
+          <span>7</span>
+          <span>8</span>
+          <span>9</span>
+          <span>10</span>
+        </div>
+        <div class="slider-wrapper">
+          <input id="guest-slider" type="range" min="1" max="10" value="1" class="text-center custom-slider" oninput="updateGuestCount()">
+        </div>
+      </div>
+    </div>
+      <div class="d-flex flex-column align-items-center mb-3">
+        <label for="reservation-name" class="form-label">예약자 이름</label>
+        <input type="text" id="reservation-name" class="text-center form-control" required>
+      </div>
+
+      <div class="d-flex flex-column align-items-center mb-3">
+        <label for="phone" class="form-label">휴대폰 번호</label>
+        <input type="tel" id="phone" class="text-center form-control" required>
+      </div>
+      
+      <div class="d-flex flex-column align-items-center mb-3">
+        <label for="email" class="form-label">이메일</label>
+        <input type="email" id="email" class="text-center form-control" required>
+      </div>
+
+      <div class="d-flex flex-column align-items-center mb-3">
+        <label for="pets" class="form-label">반려동물 정보</label>
+        <input type="text" style="width: 100px; text-align: center;"required placeholder="이름">
+        <input id="pet_age" type="text"style="width: 100px;text-align: center;"required placeholder="나이">
+        <input type="text"style="width: 100px;text-align: center;"required placeholder="종">
+        <input id="pet_weight" type="text"style="width: 100px;text-align: center;"required placeholder="무게">
+      </div>
+
+      <!-- 결제 방법 -->
+      <div class="payment-method d-flex flex-column align-items-center mb-3">
+        <div>
+          <label for="payment-card" class="form-label">카드 결제</label>
+          <input type="radio" id="payment-card" name="payment-method" value="card" checked>
+        </div>
+        <div>
+          <label for="payment-paypal" class="form-label">계좌이체</label>
+          <input type="radio" id="payment-paypal" name="payment-method" value="paypal">
+        </div>
+      </div>
+
+      <div class="d-flex flex-column align-items-center mb-3">
+        <button type="button" class="btn btn-custom" onclick="calculateTotalPrice()">예약 확인</button>
+      </div>
+    </form>
+    <div class="d-flex flex-column align-items-center">
+
+      <!-- 예약 정보 출력 -->
+      <div id="reservation-summary" class="mt-4">
+        <h3 class="text-center">예약 정보</h3>
+      <p><strong>숙소:</strong> <span id="summary-room-name"></span></p>
+      <p><strong>체크인 날짜:</strong> <span id="summary-checkin"></span></p>
+      <p><strong>체크아웃 날짜:</strong> <span id="summary-checkout"></span></p>
+      <p><strong>예약자:</strong> <span id="summary-name"></span></p>
+      <p><strong>휴대폰 번호:</strong> <span id="summary-phone"></span></p>
+      <p><strong>이메일:</strong> <span id="summary-email"></span></p>
+      <p><strong>반려동물 정보:</strong> <span id="summary-pets"></span></p>
+      <p><strong>총 금액:</strong> ₩<span id="summary-total-price"></span></p>
+      <button class="btn btn-custom" onclick="submitReservation()">예약 완료</button>
+    </div>
+  </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    let roomPrice = 120000; // 객실 가격
+
+    // 날짜 차이 계산하여 총 금액 계산
+    function calculateTotalPrice() {
+      const checkinDate = document.getElementById('checkin-date').value;
+      const checkoutDate = document.getElementById('checkout-date').value;
+
+      if (!checkinDate || !checkoutDate) {
+        alert("체크인과 체크아웃 날짜를 모두 선택해주세요.");
+        return;
+      }
+      console.log(checkinDate);
+      const checkin = new Date(checkinDate);
+      console.log(checkin);
+      const checkout = new Date(checkoutDate);
+      console.log(checkout);
+      const timeDifference = checkout - checkin;
+      console.log(timeDifference);
+      const days = timeDifference / (1000 * 3600 * 24);
+      
+      if (days <= 0) {
+        alert("체크아웃 날짜는 체크인 날짜 이후여야 합니다.");
+        return;
+      }
+
+      const totalPrice = roomPrice * days;
+      document.getElementById('summary-room-name').textContent = document.getElementById('room-name').textContent;
+      document.getElementById('summary-checkin').textContent = checkinDate;
+      document.getElementById('summary-checkout').textContent = checkoutDate;
+      document.getElementById('summary-name').textContent = document.getElementById('reservation-name').value;
+      document.getElementById('summary-phone').textContent = document.getElementById('phone').value;
+      document.getElementById('summary-email').textContent = document.getElementById('email').value;
+      document.getElementById('summary-pets').textContent = document.getElementById('pets').value === 'yes' ? "예" : "아니오";
+      document.getElementById('summary-total-price').textContent = totalPrice.toLocaleString();
+
+      // 예약 정보 영역 표시
+      document.getElementById('reservation-summary').style.display = 'block';
+      document.getElementById('reservation-form').style.display = 'none';
+    }
+
+    // 예약 완료
+    function submitReservation() {
+      alert("예약이 완료되었습니다.");
+      location.reload(); // 페이지 리로드
+    }
+
+    function updateGuestCount() {
+      const slider = document.getElementById('guest-slider');
+      const output = document.getElementById('guest-count');
+      output.textContent ="인원: "+ slider.value + "명";
+    }
+
+    let pet_weight = document.getElementById('pet_weight');
+    let pet_age = document.getElementById('pet_age');
+
+    pet_weight.addEventListener('blur', function() {
+  // 값이 비어 있지 않고 이미 'kg'가 없다면 'kg'를 추가
+      if (pet_weight.value !== "" && !pet_weight.value.includes("kg")) {
+        pet_weight.value = pet_weight.value + 'kg';
+      }
+    });
+    pet_age.addEventListener('blur', function() {
+      // 값이 비어 있지 않으면 kg을 붙임
+      if(pet_age.value !== "" && !pet_age.value.includes("살")) {
+        pet_age.value = pet_age.value + '살';
+      }
+    });
+
+
+  </script>
+
+</body>
+</html>
