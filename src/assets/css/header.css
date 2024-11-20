@@ -1,0 +1,35 @@
+#nav {
+    list-style-type: none;
+    margin: 7px 5px 10px 0;
+    padding: 0;
+    overflow: hidden;
+}
+li {
+    float: left;
+    margin-left : 10px;
+}
+#login , #logout {
+    background-color: #bc915e;
+    border: none;
+    height: 35px;
+    color: white;
+    margin-left: 2px;
+}
+#login:hover{
+    background-color: #fff9f0;
+    border: solid 3px  #bc915e;
+    color : #bc915e;
+}
+#logout:hover{
+    background-color: #fff9f0;
+    border: solid 3px  #bc915e;
+    color : #bc915e;
+}
+nav ul li {
+    height: 30px;
+    margin: 10px;
+}
+nav ul li :hover {
+    background-color: #fff9f0;
+    border: solid 3px  #bc915e;
+}
