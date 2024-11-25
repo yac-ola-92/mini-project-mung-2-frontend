@@ -1,3 +1,23 @@
+ import { createRouter, createWebHistory } from 'vue-router'
+
+// import MyAccomList from '@/views/myAccomList.vue'
+// import AccomUpdate from '@/components/AccomUpdate.vue'
+
+// const router = createRouter({
+//   history: createWebHistory(import.meta.env.BASE_URL),
+//   routes: [
+//     {
+//       path: '/',
+//       name: 'myAccomList',
+//       component: MyAccomList,
+//     },
+//     {
+//       path: '/accomUpdate/:accom_id',
+//       name: 'AccomUpdate',
+//       component: AccomUpdate,
+//     },
+//   ],
+
 
 // 컴포넌트를 자동으로 import
 const modules = import.meta.glob('../components/*.vue')
@@ -10,7 +30,14 @@ const routes = Object.keys(modules).map((path) => {
     name,
     component: modules[path],
   }
-})
+});
+
+// 동적 라우트 추가
+routes.push({
+  path: '/accomUpdate/:accom_id',
+  name: 'AccomUpdate',
+  component: () => import('../components/AccomUpdate.vue') // AccomUpdate 컴포넌트 로드
+});
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

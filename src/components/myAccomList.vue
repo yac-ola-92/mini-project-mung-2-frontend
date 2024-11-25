@@ -5,7 +5,7 @@
                 <h2 style="text-align: center; color:white;">나의 숙소</h2>
             </div>
             <div class="register-btn-box">
-                <button class="list-btn" onclick="registerForm()" style="margin: 10px; width: 80px;">숙소 등록</button>
+                <button class="list-btn" @click="registerForm" style="margin: 10px; width: 80px;">숙소 등록</button>
             </div>
             <div class="accom-content" v-for="acc in userAcc" :key="acc.accom_id">
                 <div class="accom-box">
@@ -32,6 +32,7 @@
   import { useRouter } from 'vue-router'; // useRouter 훅 추가
 
   export default {
+    name: 'myAccomList',
     setup() {
       const userAcc = ref([]);
       const router = useRouter(); 
@@ -79,7 +80,7 @@
       
       // 숙소 등록 폼 이동
       const registerForm = () =>{
-        window.location.href = '';
+        window.location.href = 'http://localhost:8088/registerForm';
       }
       
       onMounted(getUserId);
